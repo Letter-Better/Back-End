@@ -37,3 +37,14 @@ class User(AbstractBaseUser):
     def __str__(self) -> str:
         return self.username
 
+class Friend(models.Model):
+    user = models.ForeignKey(User, db_column="user", related_name="user_set", on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, db_column="friend", related_name="friend_set", on_delete=models.CASCADE)
+    create_at = models.DateTimeField("Create At", db_column="create_at", auto_now_add=True, editable=False)
+
+    class Meta:
+        db_table = "userfriend"
+    
+    def __str__(self) -> str:
+        return f"{self.user} {self.friend}"
+
