@@ -46,7 +46,7 @@ class Friend(models.Model):
     create_at = models.DateTimeField("Create At", db_column="create_at", auto_now_add=True, editable=False)
 
     class Meta:
-        db_table = "userfriend"
+        db_table = "friend"
     
     def __str__(self) -> str:
         return f"{self.user} {self.friend}"
@@ -62,7 +62,7 @@ class Status(models.Model):
     update_at = models.DateTimeField("Update At", db_column="update_at", auto_now=True)
 
     class Meta:
-        db_table = "Status"
+        db_table = "status"
 
     def __str__(self) -> str:
         return self.user
