@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 import uuid
+from .managers import UserManager
 
 MESSAGES = (
     ('', ''),
@@ -13,7 +14,7 @@ class User(AbstractBaseUser):
     class Role(models.IntegerChoices):
         PLAYER = 1, _('player')
         ADMIN = 2, _('admin')
-        SERVER = 3, _('server')
+        OWNER = 3, _('owner')
 
     username = models.CharField("Username", db_column="username", max_length=200, unique=True)
     email = models.EmailField("Email", db_column="email", max_length=200, unique=True)
@@ -28,8 +29,10 @@ class User(AbstractBaseUser):
     is_vip = models.BooleanField("is VIP", db_column="is_vip", default=False)
     is_donator = models.BooleanField("is Donator", db_column="is_donator", default=False)
 
+    objects = UserManager()
+
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['email']
 
     class Meta:
         db_table = "user"
