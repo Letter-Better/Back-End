@@ -40,7 +40,8 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['email']
 
     class Meta:
-        db_table = "user"
+        verbose_name_plural = "Users"
+        db_table = "User"
 
     def __str__(self) -> str:
         return self.username
@@ -51,7 +52,8 @@ class Friend(models.Model):
     create_at = models.DateTimeField("Create At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
 
     class Meta:
-        db_table = "friend"
+        verbose_name_plural = "Friends"
+        db_table = "Friend"
     
     def __str__(self) -> str:
         return f"{self.user} {self.friend}"
@@ -67,7 +69,8 @@ class Status(models.Model):
     update_at = models.DateTimeField("Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
 
     class Meta:
-        db_table = "status"
+        verbose_name_plural = "Status"
+        db_table = "Status"
 
     def __str__(self) -> str:
         return self.user
