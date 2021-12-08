@@ -8,7 +8,8 @@ from .models import (
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('username', 'email', 'password')
+        write_only_fields = ('password',)
 
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:

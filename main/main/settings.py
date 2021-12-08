@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -18,7 +19,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-    'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authtoken'    
     ]
 }
 
@@ -37,6 +41,8 @@ INSTALLED_APPS = [
     'campaign.apps.CampaignConfig'
     # 3rd Apps
     'rest_framework',
+    'rest_framework.authtoken',
+    #'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [

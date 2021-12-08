@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 
 class IsMember(BasePermission):
-    message = ""
+    message = "You are not an member."
 
     def has_permission(self, request, view):
         VALID_METHOD = ("GET", "POST", "UPDATE")
