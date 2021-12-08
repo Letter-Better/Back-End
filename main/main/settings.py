@@ -1,5 +1,4 @@
 from pathlib import Path
-from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,7 +21,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-    'rest_framework.authtoken'    
+        'rest_framework.authentication.TokenAuthentication'    
     ]
 }
 
@@ -38,11 +37,15 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'home.apps.HomeConfig',
     'online.apps.OnlineConfig',
-    'campaign.apps.CampaignConfig'
+    'campaign.apps.CampaignConfig',
     # 3rd Apps
     'rest_framework',
     'rest_framework.authtoken',
-    #'rest_framework_simplejwt',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'user.authentications.UsernameBackend',
+    'user.authentications.EmailBackend'
 ]
 
 MIDDLEWARE = [
