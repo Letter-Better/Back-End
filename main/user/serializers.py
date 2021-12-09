@@ -28,3 +28,8 @@ class FriendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Friend
         fields = '__all__'
+
+
+class EmailValidateSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=200)
+    code = serializers.CharField(max_length=6)

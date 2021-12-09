@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.db.models.manager import BaseManager
 from django.utils.translation import ugettext_lazy as _
 import uuid
 from .managers import UserManager
@@ -34,8 +35,9 @@ class User(AbstractBaseUser):
     is_vip = models.BooleanField("is VIP", db_column="is_vip", default=False, error_messages=MESSAGES)
     is_donator = models.BooleanField("is Donator", db_column="is_donator", default=False, error_messages=MESSAGES)
     is_email_verfied = models.BooleanField("is Email verfied", db_column="is_email_verfied", default=False, error_messages=MESSAGES)
-
+    # TODO: fix is_email_verfied name
     objects = UserManager()
+    defmanager = models.Manager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']

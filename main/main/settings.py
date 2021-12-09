@@ -3,7 +3,7 @@ import redis
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-REDIS = redis.Redis(host=None, port=None)
+REDIS = redis.Redis(host="127.0.0.1", port=6379)
 
 SECRET_KEY = 'django-insecure-r@3-*gqozng55dql+e968txpotxnuj=e_u(k#(b3yxh3j$g_dv'
 

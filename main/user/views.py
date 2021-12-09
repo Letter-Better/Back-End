@@ -1,8 +1,13 @@
+from django import conf
 from rest_framework.views import APIView
-from .serializers import UserSerializer
+from .serializers import (
+    UserSerializer,
+    EmailValidateSerializer
+)
 from rest_framework.status import (
     HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST
+    HTTP_400_BAD_REQUEST,
+    HTTP_200_OK
 )
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -35,24 +40,30 @@ class UserRegisterView(APIView):
         if serializer.is_valid():
             serializer.save()
             generated_code = uuid.uuid4().hex[:6]
-            REDIS.set(request.data["email"], generated_code)
-            return Response(status=HTTP_201_CREATED)
+            print("-"*10 + generated_code + "-"*10)
+            REDIS.set(serializer.validated_data["email"].lower(), generated_code)
+            return Response({"detail": "success"}, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class EmailValidateView(APIView):
     authentication_classes = []
     permission_classes = []
     throttle_classes = []
-    
+
     def post(self, request, format=None):
-        email = request.data["email"]
-        try:
-            user = User.objects.get(email=email)
-            code = REDIS.get(email)
-            if user.is_email_verified == False and code == request.data["code"]:
-                user.is_email_verified = True
-                user.save()
-                token, created = Token.objects.get_or_create(user=user)
-                Response({"token": token.key})
-        except User.DoesNotExist:
-            return Response({"detail": "not found."})
+        # TODO: fix is_email_verfied name
+        serializer = EmailValidateSerializer(data=request.data)
+        if serializer.is_valid():
+            email, code = serializer.validated_data["email"], serializer.validated_data["code"]
+            try:
+                user = User.defmanager.get(email=email.lower())
+                redis_code = REDIS.get(email.lower())
+                if user.is_email_verified == False and redis_code.decode() == code:
+                    print("if True")
+                    user.is_email_verified = True
+                    user.save()
+                    token, created = Token.objects.get_or_create(user=user)
+                    return Response({"token": token.key}, status=HTTP_200_OK)
+            except User.DoesNotExist:
+                return Response({"detail": "not found."})
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
