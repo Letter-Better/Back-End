@@ -1,24 +1,42 @@
 from pathlib import Path
+import redis
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+REDIS = redis.Redis(host="127.0.0.1", port=6379)
+
 SECRET_KEY = 'django-insecure-r@3-*gqozng55dql+e968txpotxnuj=e_u(k#(b3yxh3j$g_dv'
+
 DEBUG = True
+
 ALLOWED_HOSTS = []
+
 AUTH_USER_MODEL = 'user.User'
+
 ROOT_URLCONF = 'main.urls'
+
 WSGI_APPLICATION = 'main.wsgi.application'
+
 LANGUAGE_CODE = 'en-us'
+
 TIME_ZONE = 'UTC'
+
 USE_I18N = True
+
 USE_L10N = True
+
 USE_TZ = True
+
 STATIC_URL = '/static/'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-    'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'    
     ]
 }
 
@@ -34,9 +52,15 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'home.apps.HomeConfig',
     'online.apps.OnlineConfig',
-    'campaign.apps.CampaignConfig'
+    'campaign.apps.CampaignConfig',
     # 3rd Apps
     'rest_framework',
+    'rest_framework.authtoken',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'user.authentications.UsernameBackend',
+    'user.authentications.EmailBackend'
 ]
 
 MIDDLEWARE = [

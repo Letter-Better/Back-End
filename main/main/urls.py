@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.authtoken import views
 
 urlpatterns = [
-    path(...),
+    path('user/', include('user.urls', namespace='user')),
 ]

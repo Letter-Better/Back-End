@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.db.models.manager import BaseManager
 from django.utils.translation import ugettext_lazy as _
 import uuid
 from .managers import UserManager
@@ -33,8 +34,10 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField("is Active", db_column="is_active", default=True, error_messages=MESSAGES)
     is_vip = models.BooleanField("is VIP", db_column="is_vip", default=False, error_messages=MESSAGES)
     is_donator = models.BooleanField("is Donator", db_column="is_donator", default=False, error_messages=MESSAGES)
+    is_email_verified = models.BooleanField("is Email verified", db_column="is_email_verified", default=False, error_messages=MESSAGES)
 
     objects = UserManager()
+    defmanager = models.Manager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
