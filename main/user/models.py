@@ -33,6 +33,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField("is Active", db_column="is_active", default=True, error_messages=MESSAGES)
     is_vip = models.BooleanField("is VIP", db_column="is_vip", default=False, error_messages=MESSAGES)
     is_donator = models.BooleanField("is Donator", db_column="is_donator", default=False, error_messages=MESSAGES)
+    is_email_verfied = models.BooleanField("is Email verfied", db_column="is_email_verfied", default=False, error_messages=MESSAGES)
 
     objects = UserManager()
 
