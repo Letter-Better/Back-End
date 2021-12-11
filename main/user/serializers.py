@@ -6,10 +6,15 @@ from .models import (
 )
 
 class UserSerializer(serializers.ModelSerializer):
+    code = serializers.CharField(max_lenght=6)
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
         write_only_fields = ('password',)
+
+    def validate_email(self, value):
+        return value.lower()
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -29,7 +34,8 @@ class FriendSerializer(serializers.ModelSerializer):
         model = Friend
         fields = '__all__'
 
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_lenght=200)
 
-class EmailValidateSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=200)
-    code = serializers.CharField(max_length=6)
+    def validate_email(self, value):
+        return value.lower()
