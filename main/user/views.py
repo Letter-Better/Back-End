@@ -1,11 +1,14 @@
 from os import stat
+from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import (
     UserSerializer,
     EmailSerializer,
+    CodeSerializer,
 )
 from rest_framework.status import (
     HTTP_201_CREATED,
+    HTTP_202_ACCEPTED,
     HTTP_400_BAD_REQUEST,
     HTTP_200_OK
 )
@@ -84,3 +87,22 @@ class ForgotPasswordView(APIView):
             return Response({"detail": "email sended."}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
+class ValidateForgotPassword(APIView):
+    authentication_classes = []
+    permission_classes = []
+    throttle_classes = []
+
+    def post(self, request, format=None):
+        serializer = CodeSerializer(data=request.data)
+        if serializer.is_valid():
+            code, new_pass = serializer.validated_data["code"], serializer.validated_data["password"]
+            value = REDIS.get(code)
+            if value != None:
+                try:
+                    user = User.objects.get(email=value.decode())
+                except User.DoesNotExist:
+                    return Response({"detail": "not found"}, status=HTTP_400_BAD_REQUEST)
+                user.set_password(new_pass)
+                return Response({"detail": "pass changed"}, status=HTTP_202_ACCEPTED)
+            return Response({"detail": "code not valid"})
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

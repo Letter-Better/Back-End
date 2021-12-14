@@ -39,3 +39,7 @@ class EmailSerializer(serializers.Serializer):
 
     def validate_email(self, value):
         return value.lower()
+
+class CodeSerializer(serializers.Serializer):
+    code = serializers.CharField(max_lenght=16)
+    password = serializers.CharField()
