@@ -80,7 +80,7 @@ class ForgotPasswordView(APIView):
             except User.DoesNotExist:
                 return Response({"detail": "user not found."}, status=HTTP_400_BAD_REQUEST)
             generated_code = uuid.uuid4().hex[:16]
-
+            print("-"*20 + generated_code + "-"*20)
             # TODO: Email Service: send code
 
             REDIS.set(generated_code, email)
