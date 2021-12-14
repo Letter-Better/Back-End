@@ -7,6 +7,10 @@ REDIS = redis.Redis(host="127.0.0.1", port=6379)
 
 SECRET_KEY = 'django-insecure-r@3-*gqozng55dql+e968txpotxnuj=e_u(k#(b3yxh3j$g_dv'
 
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -30,6 +34,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3030',
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    'http://localhost:3030',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -64,6 +76,7 @@ INSTALLED_APPS = [
     # 3rd Apps
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -74,6 +87,7 @@ AUTHENTICATION_BACKENDS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
