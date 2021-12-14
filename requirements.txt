@@ -1,6 +1,7 @@
 asgiref==3.4.1
 Deprecated==1.2.13
 Django==3.2.9
+django-cors-headers==3.10.1
 djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
 MakeDjango==1.0.4
