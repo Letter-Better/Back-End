@@ -5,6 +5,8 @@ django-cors-headers==3.10.1
 djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
 MakeDjango==1.0.4
+numpy==1.21.4
+opencv-python==4.5.4.60
 prompt-toolkit==1.0.14
 pyfiglet==0.8.post1
 Pygments==2.10.0
