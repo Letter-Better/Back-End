@@ -20,6 +20,7 @@ AUTH_USER_MODEL = 'user.User'
 ROOT_URLCONF = 'main.urls'
 
 WSGI_APPLICATION = 'main.wsgi.application'
+ASGI_APPLICATION = 'main.asgi.application'
 
 LANGUAGE_CODE = 'en-us'
 
@@ -76,6 +77,7 @@ INSTALLED_APPS = [
     # 3rd Apps
     'rest_framework',
     'rest_framework.authtoken',
+    'channels',
     'corsheaders',
 ]
 

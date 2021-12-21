@@ -75,3 +75,14 @@ class Status(models.Model):
 
     def __str__(self) -> str:
         return self.user
+
+class UserMission(models.Model):
+    user = models.OneToOneField(User, verbose_name="User", on_delete=models.CASCADE, db_column="user", error_messages=MESSAGES)
+    mission_number = models.IntegerField(verbose_name="Mision Number", db_column="mission_num", default=1, error_messages=MESSAGES)
+    create_at = models.DateTimeField(verbose_name="Created At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
+    update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
+
+    class Meta:
+        verbose_name_plural = "User Missions"
+        db_table = "UserMission"        
+
