@@ -1,6 +1,7 @@
 from user.models import User
 from django.db import models
 
+
 MESSAGES = {
     "unique": "...",
     "required": "...",
@@ -41,8 +42,8 @@ class BestUsersInMission(models.Model):
     update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
   
     class Meta:
-        verbose_name_plural = "Missions"
-        db_table = "Mission"
+        verbose_name_plural = "BestUsers"
+        db_table = "BestUsers"
 
     def __str__(self) -> str:
         return f"{self.user.username}-{self.user_rank}"
