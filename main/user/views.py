@@ -20,18 +20,6 @@ from rest_framework.response import Response
 from main.settings import REDIS
 import uuid
 
-class GetTokenView(ObtainAuthToken):
-    authentication_classes = []
-    permission_classes = []
-    throttle_classes = []
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
-
 class UserRegisterView(APIView):
     authentication_classes = []
     permission_classes = []
