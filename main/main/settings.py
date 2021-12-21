@@ -1,19 +1,16 @@
 from pathlib import Path
-import configparser
+import json
 import redis
-
-parser = configparser.ConfigParser()
-parser.read("../config.ini")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-REDIS = redis.Redis(host="127.0.0.1", port=6379)
+conf = json.load(open(BASE_DIR / "config.json"))
 
-SECRET_KEY = 'django-insecure-r@3-*gqozng55dql+e968txpotxnuj=e_u(k#(b3yxh3j$g_dv'
+SECRET_KEY = conf["settings"]["SECRET_KEY"]
 
-DEBUG = True
+DEBUG = conf["settings"]["DEBUG"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = conf["settings"]["ALLOWED_HOSTS"]
 
 AUTH_USER_MODEL = 'user.User'
 
@@ -36,6 +33,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(conf["redis"]["host"], conf["redis"]["port"])],
+        },
+    },
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -104,6 +110,10 @@ TEMPLATES = [
         },
     },
 ]
+
+# Database:
+
+REDIS = redis.Redis(host=conf["redis"]["host"], port=conf["redis"]["port"])
 
 DATABASES = {
     'default': {
