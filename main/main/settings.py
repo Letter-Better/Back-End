@@ -2,6 +2,10 @@ from pathlib import Path
 from datetime import timedelta
 import json
 import redis
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,6 +38,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+sentry_sdk.init(
+    dsn=conf['sentry_dsn'],
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+)
 
 CHANNEL_LAYERS = {
     'default': {
