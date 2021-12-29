@@ -1,6 +1,8 @@
 from django.urls import path, include
-from rest_framework.authtoken import views
+from django.contrib import admin
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('user/', include('user.urls', namespace='user')),
+    path('room/', include('online.urls', namespace='online')),
 ]
