@@ -14,9 +14,15 @@ class CreateRoomSerializer(serializers.ModelSerializer):
             'room_type',
             'difficulty'
         )
-        extra_kwargs = {'creator': {'required': False}}
+        extra_kwargs = {
+            'creator': {'required': False},
+            'time_of_draw': {'required': True},
+            'round': {'required': True},
+            'number_of_users': {'required': True},
+            'room_type': {'required': True},
+            'difficulty': {'required': True},
+            }
     
-    def create(self, validated_data):
-        validated_data["creator"] = CurrentUserDefault()
-        return super().create(validated_data)
+
+
 

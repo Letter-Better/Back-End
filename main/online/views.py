@@ -16,26 +16,23 @@ class CreateRoomView(APIView):
     def post(self, request, format=None):
         serializer = CreateRoomSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.object.creator = self.request.user
-            room = serializer.save()
-            print(room)
-            
-            #RoomMember.objects.create(room=room, members=room.creator).save()
-            data = {}#{"redirect_url": reverse('online:room', request=request)}
-            return Response(data, status=HTTP_201_CREATED)
+            room = serializer.save(creator=request.user)
+            RoomMember.objects.create(room=room, members=request.user).save()
+            #data = {"redirect_url": reverse('online:room', args=room.room_code, request=request)}
+            return Response(data={"redirect": room.room_code}, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class RoomView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_classes = []
 
-    def get(self, room_code):
+    def get(self, request, room_code):
         try:
             room_ins = Room.objects.get(room_code=room_code)
         except Room.DoesNotExist:
             return Response({"redirect": reverse('home:404', request=self.request)})
 
-        if room_ins.members_roommember.filter(id=self.request.user.id).exists():
+        if RoomMember.objects.get(room=room_ins, member=request.user).exists():
             return Response(data={"accept": "yes"})
         return Response(data={"none": "none"})
     #def post(self, room_code): ...

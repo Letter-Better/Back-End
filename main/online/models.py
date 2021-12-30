@@ -52,7 +52,7 @@ class Room(models.Model):
     number_of_users = models.IntegerField(verbose_name="number of user", db_column="number_of_users", choices=NumberOFUsers.choices, default=NumberOFUsers.Three, error_messages=MESSAGES)
     room_type = models.IntegerField(verbose_name="Room Type", db_column="room_type", choices=RoomType.choices, default=RoomType.Public, error_messages=MESSAGES)
     difficulty = models.CharField(verbose_name="Difficulty", db_column="difficulty", choices=DIFFICULTY, default='easy', max_length=50, error_messages=MESSAGES)
-    room_code = models.CharField(verbose_name="Room Code", db_column="room_code", max_length=30, unique=True, default=random_room_code, error_messages=MESSAGES)
+    room_code = models.CharField(verbose_name="Room Code", db_column="room_code", max_length=30, unique=True, default=random_room_code(), error_messages=MESSAGES)
     create_at = models.DateTimeField(verbose_name="Created At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
     update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
 
@@ -64,7 +64,7 @@ class Room(models.Model):
         return f"{self.creator} - {self.number_of_users}"
 
 class RoomMember(models.Model):
-    room = models.ForeignKey(Room, verbose_name="Room", db_column="room", related_name="room_roommember", on_delete=models.CASCADE, error_messages=MESSAGES)
+    room = models.OneToOneField(Room, verbose_name="Room", db_column="room", related_name="room_roommember", on_delete=models.CASCADE, error_messages=MESSAGES)
     members = models.ForeignKey(User, verbose_name="Members", db_column="memebrs", related_name="members_roommember", on_delete=models.CASCADE, error_messages=MESSAGES)
     create_at = models.DateTimeField(verbose_name="Created At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
     update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
@@ -72,10 +72,6 @@ class RoomMember(models.Model):
     class Meta:
         verbose_name_plural = "RoomMember"
         db_table = "RoomMember"
-
-
-    def __str__(self) -> str:
-        return self.room
 
 class Word(models.Model):
     DIFFICULTY = (
