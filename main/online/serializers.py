@@ -7,15 +7,16 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = (
-            'craetor',
+            'creator',
             'time_of_draw',
             'round',
             'number_of_users',
             'room_type',
             'difficulty'
         )
+        extra_kwargs = {'creator': {'required': False}}
     
     def create(self, validated_data):
-        self.user = CurrentUserDefault()
+        validated_data["creator"] = CurrentUserDefault()
         return super().create(validated_data)
 

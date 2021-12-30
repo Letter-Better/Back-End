@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import CreateRoomSerializer
 from .models import RoomMember, Room
 from rest_framework.reverse import reverse
@@ -10,21 +10,22 @@ from rest_framework.status import (
 )
 
 class CreateRoomView(APIView):
-    authentication_classes = []
     permission_classes = [IsAuthenticated]
     throttle_classes = []
 
     def post(self, request, format=None):
         serializer = CreateRoomSerializer(data=request.data)
         if serializer.is_valid():
-            room = serializer.save(commit=False)
-            RoomMember.objects.create(room=room, members=room.creator).save()
-            data = {"redirect_url": reverse('online:room', request=request)}
+            serializer.object.creator = self.request.user
+            room = serializer.save()
+            print(room)
+            
+            #RoomMember.objects.create(room=room, members=room.creator).save()
+            data = {}#{"redirect_url": reverse('online:room', request=request)}
             return Response(data, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class RoomView(APIView):
-    authentication_classes = []
     permission_classes = [IsAuthenticated]
     throttle_classes = []
 
@@ -33,7 +34,8 @@ class RoomView(APIView):
             room_ins = Room.objects.get(room_code=room_code)
         except Room.DoesNotExist:
             return Response({"redirect": reverse('home:404', request=self.request)})
-        
-        #if room_ins.
-    
-    def post(self, room_code): ...
+
+        if room_ins.members_roommember.filter(id=self.request.user.id).exists():
+            return Response(data={"accept": "yes"})
+        return Response(data={"none": "none"})
+    #def post(self, room_code): ...
