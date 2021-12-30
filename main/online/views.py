@@ -30,9 +30,10 @@ class RoomView(APIView):
 
     def get(self, room_code):
         try:
-            Room.objects.get(room_code=room_code)
+            room_ins = Room.objects.get(room_code=room_code)
         except Room.DoesNotExist:
-            return ...
+            return Response({"redirect": reverse('home:404', request=self.request)})
         
+        #if room_ins.
     
-    def post(self): ...
+    def post(self, room_code): ...
