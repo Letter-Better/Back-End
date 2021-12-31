@@ -64,8 +64,8 @@ class Room(models.Model):
         return f"{self.creator} - {self.number_of_users}"
 
 class RoomMember(models.Model):
-    room = models.OneToOneField(Room, verbose_name="Room", db_column="room", related_name="room_roommember", on_delete=models.CASCADE, error_messages=MESSAGES)
-    members = models.ForeignKey(User, verbose_name="Members", db_column="memebrs", related_name="members_roommember", on_delete=models.CASCADE, error_messages=MESSAGES)
+    room = models.OneToOneField(Room, verbose_name="Room", db_column="room", related_name="roommember", on_delete=models.CASCADE, error_messages=MESSAGES)
+    members = models.ManyToManyField(User, verbose_name="Members", db_column="memebrs", error_messages=MESSAGES)
     create_at = models.DateTimeField(verbose_name="Created At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
     update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
 

@@ -24,6 +24,8 @@ class CreateRoomView(APIView):
         serializer = CreateRoomSerializer(data=request.data)
         if serializer.is_valid():
             room = serializer.save(creator=request.user)
+            RoomMember.objects.create(room=room)
+            room.roommember.members.add(request.user.id)
             return Response(data={"redirect": room.room_code}, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -33,24 +35,22 @@ class RoomView(APIView):
 
     def get(self, request, room_code):
         try:
-            room_ins = Room.objects.get(room_code=room_code)
+            room = Room.objects.get(room_code=room_code)
         except Room.DoesNotExist:
-            return Response({"notfound": "nope"})#{"redirect": reverse('home:404', request=self.request)})
+            return Response({"not found": "noe"})
 
-        if not RoomMember.objects.filter(room_id=room_ins.id, members_id=request.user.id).exists():
+        if not RoomMember.objects.filter(room_id=room.id, members=request.user.id).exists():
             return Response({"using post to join": "..."})
-            
-        # TODO: error from here
-        my_data = RoomMemberSerializer(instance=room_ins)
+
+        my_data = RoomSerializer(room)
         return Response(my_data.data)
 
     def post(self, request, room_code):
         try:
-            room_ins = Room.objects.get(room_code=room_code)
+            room = Room.objects.get(room_code=room_code)
         except Room.DoesNotExist:
-            return Response({"notfound": "nope"})
-        RoomMember.objects.craete(room=room_ins, members_id=request.user.id)
-        my_data = RoomSerializer(room_ins)
+            return Response({"not found": "noe"})
+        
+        room.roommember.members.add(request.user.id)
+        my_data = RoomSerializer(room)
         return Response(my_data.data)
-
-
