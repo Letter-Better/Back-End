@@ -14,5 +14,11 @@ class OnlineGameConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name
         )
         
-        if database_sync_to_async():
+        try:
+            room = database_sync_to_async(Room.objects.get(room_code=self.room_code))
+        except Room.DoesNotExist:
+            ...
+
+        
+        if database_sync_to_async(RoomMember.objects.filter(room_id=room.id, members=self.user.id).exists()):
             ...
