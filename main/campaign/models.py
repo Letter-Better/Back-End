@@ -34,16 +34,20 @@ class Mission(models.Model):
     def __str__(self) -> str:
         return f"{self.number}-{self.name}"
 
-class BestUsersInMission(models.Model):
+class CampaignRanking(models.Model):
     user = models.OneToOneField(User, verbose_name="User", db_column="user", on_delete=models.CASCADE, error_messages=MESSAGES)
-    user_rank = models.IntegerField(verbose_name="user_rank", db_column="user_rank", default=999, error_messages=MESSAGES)
-    average_time = models.FloatField(verbose_name="Average Time", db_column="average_time", default=999.99, error_messages=MESSAGES)
+    win = models.IntegerField(verbose_name="win", db_column="win", default=0, error_messages=MESSAGES)
+    lose = models.IntegerField(verbose_name="lose", db_column="lose", default=0, error_messages=MESSAGES)
     create_at = models.DateTimeField(verbose_name="Created At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
     update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
-  
+
+    @property
+    def rank(self):
+        return self.win / self.lose
+
     class Meta:
-        verbose_name_plural = "BestUsers"
-        db_table = "BestUsers"
+        verbose_name_plural = "Campaign Ranking"
+        db_table = "CampaignRanking"
 
     def __str__(self) -> str:
         return f"{self.user.username}-{self.user_rank}"
