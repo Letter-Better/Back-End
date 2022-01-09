@@ -41,13 +41,14 @@ class CampaignRanking(models.Model):
     create_at = models.DateTimeField(verbose_name="Created At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
     update_at = models.DateTimeField(verbose_name="Update At", db_column="update_at", auto_now=True, error_messages=MESSAGES)
 
-    @property
-    def rank(self):
-        return self.win / self.lose
-
     class Meta:
         verbose_name_plural = "Campaign Ranking"
         db_table = "CampaignRanking"
+        ordering = ('-rank',)
+
+    @property
+    def rank(self):
+        return self.win / self.lose
 
     def __str__(self) -> str:
         return f"{self.user.username}-{self.user_rank}"

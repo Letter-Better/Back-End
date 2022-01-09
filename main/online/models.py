@@ -103,6 +103,7 @@ class OnlineRanking(models.Model):
     class Meta:
         verbose_name_plural = "OnlineRanking"
         db_table = "OnlineRanking"
+        ordering = ('-rank',)
 
     @property
     def rank(self):
