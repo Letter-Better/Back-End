@@ -10,20 +10,27 @@ class OnlineRankingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OnlineRanking
-        fields = ("rank", "user", "win", "lose")
+        fields = ("rank", "user")
 
 class CampaignRankingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CampaignRanking
-        fields = ("rank", "user", "win", "lose")
+        fields = ("rank", "user")
 
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
-        fields = '__all__'
+        fields = ("rank", "user")
 
 class FriendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Friend
-        fields = '__all__'
+        fields = ("friends",)
+
+class HomePage(serializers.Serializer):
+    online_ranking = CampaignRankingSerializer(many=True, read_only=True)
+    campaign_ranking = StatusSerializer(many=True, read_only=True)
+    users_ranking = FriendSerializer(many=True, read_only=True)
+
+
