@@ -5,7 +5,7 @@ from user.models import (
     User, Status, Friend
 )
 
-
+# TODO: add User relation in (OnlineRankingSerializer,CampaignRankingSerializer,StatusSerializer)
 class OnlineRankingSerializer(serializers.ModelSerializer):
 
     class Meta:
