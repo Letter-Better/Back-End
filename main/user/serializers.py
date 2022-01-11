@@ -24,16 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
-class StatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Status
-        fields = '__all__'
-
-class FriendSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Friend
-        fields = '__all__'
-
 class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=200)
 

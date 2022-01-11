@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
         return self.username
 
 class Friend(models.Model):
-    user = models.ForeignKey(User, db_column="user", related_name="user_set", on_delete=models.CASCADE, error_messages=MESSAGES)
+    user = models.OneToOneField(User, db_column="user", related_name="user_set", on_delete=models.CASCADE, error_messages=MESSAGES)
     friend = models.ForeignKey(User, db_column="friend", related_name="friend_set", on_delete=models.CASCADE, error_messages=MESSAGES)
     create_at = models.DateTimeField(verbose_name="Create At", db_column="create_at", auto_now_add=True, editable=False, error_messages=MESSAGES)
 
@@ -90,8 +90,12 @@ class Status(models.Model):
         verbose_name_plural = "Status"
         db_table = "Status"
 
+    @property
+    def rank(self):
+        return self.win / self.lose
+
     def __str__(self) -> str:
-        return self.user
+        return self.user.username
 
 class UserMission(models.Model):
     user = models.OneToOneField(User, verbose_name="User", on_delete=models.CASCADE, db_column="user", error_messages=MESSAGES)

@@ -34,7 +34,6 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
 
 class RoomMemberSerializer(serializers.ModelSerializer):
-    #members
 
     class Meta:
         model = RoomMember
@@ -46,9 +45,6 @@ class RoomSerializer(serializers.ModelSerializer):
     room_member = serializers.SerializerMethodField()
 
     def get_room_member(self, obj):
-        #room_mem = RoomMember.objects.get(room_id=obj.id, members_id=obj.creator.id)
-        #serializer = RoomMemberSerializer(room_mem)
-        print(obj.roommember)
         return SimpleUserSerializer(obj.roommember.members, many=True).data
 
     class Meta:
