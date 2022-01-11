@@ -95,7 +95,7 @@ class Status(models.Model):
         return self.win / self.lose
 
     def __str__(self) -> str:
-        return self.user
+        return self.user.username
 
 class UserMission(models.Model):
     user = models.OneToOneField(User, verbose_name="User", on_delete=models.CASCADE, db_column="user", error_messages=MESSAGES)

@@ -50,4 +50,4 @@ class CampaignRanking(models.Model):
         return self.win / self.lose
 
     def __str__(self) -> str:
-        return f"{self.user.username}-{self.user_rank}"
+        return f"{self.user.username}-{self.rank}"

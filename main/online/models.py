@@ -109,4 +109,4 @@ class OnlineRanking(models.Model):
         return self.win / self.lose
 
     def __str__(self) -> str:
-        return self.user
+        return f"{self.user.username}-{self.rank}"
