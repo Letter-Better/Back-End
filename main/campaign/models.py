@@ -44,7 +44,6 @@ class CampaignRanking(models.Model):
     class Meta:
         verbose_name_plural = "Campaign Ranking"
         db_table = "CampaignRanking"
-        ordering = ('-rank',)
 
     @property
     def rank(self):
