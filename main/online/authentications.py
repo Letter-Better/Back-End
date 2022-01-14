@@ -28,4 +28,6 @@ class JWTAuthenticationMiddleware(BaseMiddleware):
             scope["user"] = AnonymousUser()
         except ExpiredSignatureError:
             scope["user"] = AnonymousUser()
+        except IndexError:
+            scope["user"] = AnonymousUser()
         return await super().__call__(scope, receive, send)

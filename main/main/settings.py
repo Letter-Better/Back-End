@@ -3,6 +3,7 @@ from datetime import timedelta
 import json
 import redis
 import sentry_sdk
+from firebase_admin import initialize_app
 from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,6 +19,8 @@ ALLOWED_HOSTS = conf["settings"]["ALLOWED_HOSTS"]
 AUTH_USER_MODEL = 'user.User'
 
 ROOT_URLCONF = 'main.urls'
+
+FIREBASE_APP = initialize_app()
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
@@ -43,6 +46,13 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True
 )
+
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": "FCM_LetterBetter",
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": False,
+    "UPDATE_ON_DUPLICATE_REG_ID": True,
+}
 
 CHANNEL_LAYERS = {
     'default': {
@@ -111,11 +121,12 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'online.apps.OnlineConfig',
     'campaign.apps.CampaignConfig',
-    'admin.apps.AppsConfig',
+    'owner.apps.OwnerConfig',
     # 3rd Apps
     'rest_framework',
     'rest_framework_simplejwt',
     'channels',
+    'fcm_django',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -191,10 +202,6 @@ LOGGING = {
         },
     },
     'filters': {
-        'special': {
-            '()': 'project.logging.SpecialFilter',
-            'foo': 'bar',
-        },
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
@@ -206,26 +213,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'filters': ['special']
-        }
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
             'propagate': True,
         },
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'myproject.custom': {
-            'handlers': ['console', 'mail_admins'],
-            'level': 'INFO',
-            'filters': ['special']
-        }
     }
 }
