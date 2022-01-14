@@ -29,10 +29,3 @@ class StatusRankView(APIView):
         seria = StatusSerializer(model_data, many=True)
         return Response(seria.data)
 
-class DashBoardView(APIView):
-    """
-    
-    """
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request): ...
