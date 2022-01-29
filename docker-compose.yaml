@@ -1,0 +1,25 @@
+version: '3.10'
+
+services:
+  db:
+    image: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: 'my-app-db'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - .setup.sql:/docker-entrypoint-initbd.d/setup.sql
+  web:
+    build: .
+    command: python main/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    links: 
+      - db 
