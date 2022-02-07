@@ -3,8 +3,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from .models import User
 
-class CreateUserForm(forms.ModelForm):
 
+class CreateUserForm(forms.ModelForm):
     _password = forms.CharField(label='Pass Conf', widget=forms.PasswordInput)
     password = forms.CharField(label='Pass', widget=forms.PasswordInput)
 
@@ -26,10 +26,10 @@ class CreateUserForm(forms.ModelForm):
             user.save()
         return user
 
+
 class ChangeUserForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = User
         fields = ('username', 'email', 'friend_code', 'full_name', 'role')
-

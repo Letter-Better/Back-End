@@ -4,11 +4,12 @@ from channels.exceptions import StopConsumer
 from .models import Room, RoomMember
 from django.contrib.auth.models import AnonymousUser
 
+
 class OnlineGameConsumer(AsyncJsonWebsocketConsumer):
     async def websocket_connect(self, event):
         self.room_code = self.scope["url_route"]["kwargs"]["room_code"]
         self.user = self.scope["user"]
-        
+
         await self.channel_layer.group_add(
             self.room_code,
             self.channel_name
@@ -20,9 +21,11 @@ class OnlineGameConsumer(AsyncJsonWebsocketConsumer):
         if not isinstance(self.user, AnonymousUser):
             if database_sync_to_async(RoomMember.objects.filter(room_id=room.id, members=self.user).exists()):
                 await self.accept()
-            else: self.close()
-        else: self.close()
-        
+            else:
+                self.close()
+        else:
+            self.close()
+
     async def websocket_disconnect(self, event):
         await self.channel_layer.group_discard(
             self.room_code, self.channel_name
@@ -32,4 +35,3 @@ class OnlineGameConsumer(AsyncJsonWebsocketConsumer):
     async def websocket_receive(self, message):
         text_data = message.get('text', None)
         bytes_data = message.get('bytes', None)
-         

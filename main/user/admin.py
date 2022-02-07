@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from .models import (User, Friend, Status)
 from .forms import (ChangeUserForm, CreateUserForm)
 
+
 class UserAdmin(BaseUserAdmin):
     form = ChangeUserForm
     add_form = CreateUserForm
@@ -25,6 +26,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
     filter_horizontal = ()
+
 
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)

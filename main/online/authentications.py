@@ -6,6 +6,7 @@ from jwt.exceptions import DecodeError, ExpiredSignatureError
 from channels.middleware import BaseMiddleware
 from main.settings import conf
 
+
 @database_sync_to_async
 def get_user(id):
     try:
@@ -13,13 +14,14 @@ def get_user(id):
     except User.DoesNotExist:
         return AnonymousUser()
 
+
 class JWTAuthenticationMiddleware(BaseMiddleware):
 
     def __init__(self, inner):
         super().__init__(inner)
 
     async def __call__(self, scope, receive, send):
-        token: list = [item[1].decode() for item in scope["headers"] if item[0].decode()=='authentication']
+        token: list = [item[1].decode() for item in scope["headers"] if item[0].decode() == 'authentication']
 
         try:
             detail = jwt_decode(token[0][7:], conf["settings"]["SECRET_KEY"], conf["jwt"]["ALGORITHM"])

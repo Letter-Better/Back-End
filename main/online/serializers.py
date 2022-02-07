@@ -3,6 +3,7 @@ from rest_framework.fields import CurrentUserDefault
 from .models import Room, RoomMember
 from user.models import User
 
+
 class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
@@ -21,7 +22,8 @@ class CreateRoomSerializer(serializers.ModelSerializer):
             'number_of_users': {'required': True},
             'room_type': {'required': True},
             'difficulty': {'required': True},
-            }
+        }
+
 
 class SimpleUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,12 +36,12 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
 
 class RoomMemberSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = RoomMember
         fields = (
             'members',
         )
+
 
 class RoomSerializer(serializers.ModelSerializer):
     room_member = serializers.SerializerMethodField()
