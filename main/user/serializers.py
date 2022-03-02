@@ -5,6 +5,7 @@ from .models import (
     Friend
 )
 
+
 class UserSerializer(serializers.ModelSerializer):
     code = serializers.CharField(max_length=6)
 
@@ -24,11 +25,13 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
+
 class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=200)
 
     def validate_email(self, value):
         return value.lower()
+
 
 class CodeSerializer(serializers.Serializer):
     code = serializers.CharField(max_length=16)

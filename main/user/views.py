@@ -20,6 +20,7 @@ from rest_framework.response import Response
 from main.settings import REDIS
 import uuid
 
+
 class UserRegisterView(APIView):
     authentication_classes = []
     permission_classes = []
@@ -32,11 +33,12 @@ class UserRegisterView(APIView):
 
             # TODO: Email Service: send code
 
-            print("-"*10 + generated_code + "-"*10)
+            print("-" * 10 + generated_code + "-" * 10)
             REDIS.set(generated_code, serializer.validated_data["email"])
             return Response({"detail": "success"}, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
- 
+
+
 class EmailValidateView(APIView):
     authentication_classes = []
     permission_classes = []
@@ -51,13 +53,15 @@ class EmailValidateView(APIView):
                 user = serializer.save()
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({"token": token.key}, status=HTTP_200_OK)
-            else: return Response({"detail": "code must match."}, status=HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"detail": "code must match."}, status=HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
 
 class ForgotPasswordView(APIView):
     authentication_classes = []
     permission_classes = []
-    throttle_classes = []    
+    throttle_classes = []
 
     def post(self, request, format=None):
         serializer = EmailSerializer(data=request.data)
@@ -68,12 +72,13 @@ class ForgotPasswordView(APIView):
             except User.DoesNotExist:
                 return Response({"detail": "user not found."}, status=HTTP_400_BAD_REQUEST)
             generated_code = uuid.uuid4().hex[:16]
-            print("-"*20 + generated_code + "-"*20)
+            print("-" * 20 + generated_code + "-" * 20)
             # TODO: Email Service: send code
 
             REDIS.set(generated_code, email)
             return Response({"detail": "email sended."}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
 
 class ValidateForgotPassword(APIView):
     authentication_classes = []

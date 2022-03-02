@@ -14,6 +14,7 @@ from rest_framework.status import (
     HTTP_400_BAD_REQUEST
 )
 
+
 class CreateRoomView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_classes = []
@@ -26,6 +27,7 @@ class CreateRoomView(APIView):
             room.roommember.members.add(request.user.id)
             return Response(data={"redirect": room.room_code}, status=HTTP_201_CREATED)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
 
 class RoomView(APIView):
     permission_classes = [IsAuthenticated]
@@ -48,7 +50,7 @@ class RoomView(APIView):
             room = Room.objects.get(room_code=room_code)
         except Room.DoesNotExist:
             return Response({"not found": "noe"})
-        
+
         room.roommember.members.add(request.user.id)
         my_data = RoomSerializer(room)
         return Response(my_data.data)

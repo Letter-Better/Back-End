@@ -1,0 +1,34 @@
+---> Home:
+    models:
+        ...
+    consumers:
+        ...
+    serializers:
+        OnlineRankingSerializer
+        CampaignRankingSerializer
+        StatusSerializer
+        FriendSerializer
+    urls & view:
+        CampRankView
+        OnlineRankView
+        StatusRankView
+
+---> Online:
+    models:
+        Room
+        RoomMember
+        Word
+        OnlineRanking
+    consumers & routers:
+        OnlineGameConsumer
+    serializers:
+        CreateRoomSerializer
+        SimpleUserSerializer
+        RoomMemberSerializer
+        RoomSerializer
+    urls & view:
+        CreateRoomView
+        RoomView
+    authentications:
+
+    permissions:

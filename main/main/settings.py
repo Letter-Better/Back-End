@@ -3,6 +3,7 @@ from datetime import timedelta
 import json
 import redis
 import sentry_sdk
+from firebase_admin import initialize_app
 from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,6 +19,8 @@ ALLOWED_HOSTS = conf["settings"]["ALLOWED_HOSTS"]
 AUTH_USER_MODEL = 'user.User'
 
 ROOT_URLCONF = 'main.urls'
+
+FIREBASE_APP = initialize_app()
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
@@ -43,6 +46,13 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
     send_default_pii=True
 )
+
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": "FCM_LetterBetter",
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": False,
+    "UPDATE_ON_DUPLICATE_REG_ID": True,
+}
 
 CHANNEL_LAYERS = {
     'default': {
@@ -111,10 +121,12 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'online.apps.OnlineConfig',
     'campaign.apps.CampaignConfig',
+    'owner.apps.OwnerConfig',
     # 3rd Apps
     'rest_framework',
     'rest_framework_simplejwt',
     'channels',
+    'fcm_django',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -126,12 +138,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    #'django.middleware.http.ConditionalGetMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django.middleware.http.ConditionalGetMiddleware',
 ]
 
 TEMPLATES = [
@@ -175,3 +187,37 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+    }
+}
